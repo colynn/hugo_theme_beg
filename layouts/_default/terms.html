@@ -1,0 +1,69 @@
+
+{{ define "title" }}{{ .Title }} - {{ end }}
+
+{{ define "main" }}
+{{ $termName := .Data.Plural }}
+{{ $terms := .Data.Terms.ByCount }}
+{{ $length := len $terms }}
+{{ $type := .Type }}
+
+<!-- Categories Page -->
+<div class="post-warp {{.Data.Plural}}">
+
+  <nav class="p-crumb">
+    <ol class="breadcrumb">
+      <li><a href="{{ .Site.BaseURL }}"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+      {{ with .Section }}
+      <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ $.Site.BaseURL }}{{ . | urlize }}/" itemprop="url"><span itemprop="title">{{ . }}</span></a></li>
+      {{ end }}
+      <li class="active">{{ .Title }}</li>
+    </ol>
+  </nav>
+{{ if and $.Site.Taxonomies.categories (eq $termName "categories") }}
+
+<div class="col-md-8">
+{{ range $terms }}
+    {{ $term := .Term }}
+    {{ $pages := .Pages }}
+    {{ with $.Site.GetPage "taxonomy" (printf "%s/%s" $type $term) }}
+         <div class="card-item">
+           <div class="categories" >
+             <a href="{{ .URL }}"><h3> <i class="iconfont icon-folder" style="padding-right: 3px"></i> {{ $term | humanize}}  </h3> </a>
+               {{ range first 5 $pages }}   
+                <article class="archive-item">
+                <a href="{{ .URL }}" class="archive-item-link">{{ .Title }}</a>
+                </article>
+              {{ end }}
+               {{ if gt (len $pages) 5 }}
+                  <span class="more-post">
+                    <a href="{{ .Permalink }}" class="more-post-link">More  >></a>
+               </span> 
+               {{ end }}
+           </div>
+        </div>
+    {{ end }}
+{{ end }}
+</div> 
+<div class="col-md-4">
+  {{ partial "sidebar.html" . }}
+</div>
+
+<!-- //categories-card -->
+ <!-- Tag cloud Page -->
+{{ else if and $.Site.Taxonomies.tags (eq $termName "tags") }}
+     <div class="col-md-8">
+          {{ range $.Site.Taxonomies.tags.ByCount }}
+            {{ if .Name }}
+            <span class="p-terms-tags" >
+              <a href="/tags/{{ .Name | urlize}}/"> {{ .Name }} <small>({{ .Count }})</small></a>
+            </span>
+            {{ end }}
+          {{end}}
+     </div>
+
+{{ end }}
+</div>
+<div class="col-md-4">
+  {{ partial "sidebar.html" . }}
+</div>
+{{end }}
