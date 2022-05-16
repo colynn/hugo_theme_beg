@@ -4,6 +4,9 @@ This is the Bootstrap3 based theme for Hugo.
 
 [Hugo :: A fast and modern static website engine](https://gohugo.io/)
 
+## Demo Site
+* https://childindoorplaygronud.top/
+
 ## PC View
 
 ![screenshot](https://raw.githubusercontent.com/colynn/hugo_theme_beg/master/images/screenshot.png)
